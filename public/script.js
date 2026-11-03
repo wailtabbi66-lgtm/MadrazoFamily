@@ -1,39 +1,28 @@
 const cart = { Math: 0, Cocaine: 0 };
 const price = 600;
 
-let audioContext;
+// الموسيقى موجودة في public/cartel.mp3
+const music = new Audio("/cartel.mp3");
+music.loop = true;
+music.volume = 0.25;
 
 function showScreen(id) {
   document.querySelectorAll(".screen").forEach(screen => {
     screen.classList.remove("active");
   });
+
   document.getElementById(id).classList.add("active");
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-function startMusic() {
-  try {
-    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+// تُستدعى من زر الدخول في index.html
+function enterStore() {
+  music.play().catch(() => {
+    toast("تعذر تشغيل الموسيقى. اضغط دخول مرة أخرى.");
+  });
 
-    const oscillator = audioContext.createOscillator();
-    const gain = audioContext.createGain();
-
-    oscillator.type = "sawtooth";
-    oscillator.frequency.value = 55;
-    gain.gain.value = 0.025;
-
-    oscillator.connect(gain);
-    gain.connect(audioContext.destination);
-    oscillator.start();
-  } catch (error) {
-    console.log("Audio is not supported");
-  }
-}
-
-document.getElementById("enterBtn").addEventListener("click", () => {
-  startMusic();
   showScreen("products");
-});
+}
 
 function toast(message) {
   const element = document.getElementById("toast");
@@ -46,7 +35,10 @@ function toast(message) {
 }
 
 function addProduct(name, inputId) {
-  const quantity = Number.parseInt(document.getElementById(inputId).value, 10);
+  const quantity = Number.parseInt(
+    document.getElementById(inputId).value,
+    10
+  );
 
   if (!Number.isInteger(quantity) || quantity < 1 || quantity > 999) {
     toast("أدخل كمية من 1 إلى 999");
@@ -63,7 +55,8 @@ function updateCart() {
   const total = count * price;
 
   document.getElementById("cart-count").textContent = count;
-  document.getElementById("cart-total").textContent = total.toLocaleString() + "$";
+  document.getElementById("cart-total").textContent =
+    total.toLocaleString() + "$";
 }
 
 function clearCart() {
@@ -78,6 +71,7 @@ function goInfo() {
     toast("أضف منتجًا واحدًا على الأقل");
     return;
   }
+
   showScreen("info");
 }
 
@@ -98,6 +92,7 @@ function confirmInfo() {
   for (const name of ["Math", "Cocaine"]) {
     if (cart[name] > 0) {
       const total = cart[name] * price;
+
       itemsHTML += `<p>${name}: <b>${cart[name]} × ${price}$ = ${total.toLocaleString()}$</b></p>`;
     }
   }
@@ -118,27 +113,31 @@ async function sendOrder() {
       {
         name: "Math",
         quantity: cart.Math,
-        unitPrice: 600,
-        total: cart.Math * 600
+        unitPrice: price,
+        total: cart.Math * price
       },
       {
         name: "Cocaine",
         quantity: cart.Cocaine,
-        unitPrice: 600,
-        total: cart.Cocaine * 600
+        unitPrice: price,
+        total: cart.Cocaine * price
       }
     ].filter(item => item.quantity > 0),
-    total: (cart.Math + cart.Cocaine) * 600
+    total: (cart.Math + cart.Cocaine) * price
   };
 
   try {
     const response = await fetch("/.netlify/functions/order", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify(data)
     });
 
-    if (!response.ok) throw new Error("Order failed");
+    if (!response.ok) {
+      throw new Error("Order failed");
+    }
 
     toast("تم إرسال الطلب إلى Discord بنجاح");
   } catch (error) {

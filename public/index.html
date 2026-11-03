@@ -17,7 +17,7 @@
       <div class="eyebrow">UNDERGROUND SUPPLY • CAYO PERICO</div>
       <h1>MADRAZO <span>FAMILY</span></h1>
       <p>بوابتك لطلبات السلع داخل المدينة. اختر المنتجات وأدخل معلومات العصابة وراجع طلبك قبل الإرسال.</p>
-      <button class="btn" id="enterBtn">دخول إلى المتجر ↙</button>
+      <button class="btn" id="enterBtn" onclick="enterStore()">دخول إلى المتجر ↙</button>
       <small>تبدأ الموسيقى عند دخول المتجر</small>
     </section>
 
@@ -86,7 +86,10 @@
           <label>موقع التسليم</label>
           <div class="mapbox">
             <span class="pin">📍</span>
-            <div><strong>Cayo Perico</strong><small>الموقع محدد مسبقًا</small></div>
+            <div>
+              <strong>Cayo Perico</strong>
+              <small>الموقع محدد مسبقًا</small>
+            </div>
             <span class="fixed">● محدد</span>
           </div>
         </div>
@@ -135,6 +138,10 @@
   <footer>MADRAZO FAMILY • CAYO PERICO • ROLEPLAY ORDER SYSTEM</footer>
   <div id="toast" class="toast"></div>
 
+  <!-- ملف الموسيقى -->
+  <audio id="bgMusic" src="cartel.mp3" loop preload="auto"></audio>
+
+  <!-- ملف JavaScript -->
   <script src="script.js"></script>
 </body>
 </html>
