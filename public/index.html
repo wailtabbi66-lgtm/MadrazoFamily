@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MADRAZO FAMILY | GTA RP</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">MADRAZO FAMILY <span>/ CAYO</span></div>
+    <div class="status">● نظام الطلبات | GTA RP</div>
+  </header>
+
+  <main>
+    <section id="home" class="screen active hero">
+      <div class="eyebrow">UNDERGROUND SUPPLY • CAYO PERICO</div>
+      <h1>MADRAZO <span>FAMILY</span></h1>
+      <p>بوابتك لطلبات السلع داخل المدينة. اختر المنتجات وأدخل معلومات العصابة وراجع طلبك قبل الإرسال.</p>
+      <button class="btn" id="enterBtn">دخول إلى المتجر ↙</button>
+      <small>تبدأ الموسيقى عند دخول المتجر</small>
+    </section>
+
+    <section id="products" class="screen">
+      <div class="section-head">
+        <div>
+          <h2>قائمة المنتجات</h2>
+          <p>حدد الكمية ثم أضف المنتج إلى الطلب</p>
+        </div>
+        <span class="step">01 / المنتجات</span>
+      </div>
+
+      <div class="products">
+        <article class="product">
+          <div class="symbol">▣</div>
+          <h3>Math</h3>
+          <p>منتج داخل عالم اللعبة</p>
+          <div class="price">600$ <small>/ للحبة</small></div>
+          <div class="qtyrow">
+            <input type="number" id="qty-math" min="1" max="999" value="1">
+            <button class="btn" onclick="addProduct('Math','qty-math')">شراء</button>
+          </div>
+        </article>
+
+        <article class="product">
+          <div class="symbol">◈</div>
+          <h3>Cocaine</h3>
+          <p>منتج داخل عالم اللعبة</p>
+          <div class="price">600$ <small>/ للحبة</small></div>
+          <div class="qtyrow">
+            <input type="number" id="qty-cocaine" min="1" max="999" value="1">
+            <button class="btn" onclick="addProduct('Cocaine','qty-cocaine')">شراء</button>
+          </div>
+        </article>
+      </div>
+
+      <div class="cartbar">
+        <div>عدد القطع: <strong id="cart-count">0</strong> | المجموع: <strong id="cart-total">0$</strong></div>
+        <button class="btn" onclick="goInfo()">متابعة الطلب ←</button>
+      </div>
+      <div class="actions">
+        <button class="btn secondary" onclick="showScreen('home')">رجوع</button>
+        <button class="btn secondary" onclick="clearCart()">إفراغ الطلب</button>
+      </div>
+    </section>
+
+    <section id="info" class="screen">
+      <div class="section-head">
+        <div>
+          <h2>معلومات التسليم</h2>
+          <p>أدخل معلومات العصابة ومكان الاستلام</p>
+        </div>
+        <span class="step">02 / المعلومات</span>
+      </div>
+
+      <div class="formgrid">
+        <div class="field">
+          <label for="gang">اسم العصابة / المافيا</label>
+          <input id="gang" placeholder="مثال: Madrazo Family">
+        </div>
+        <div class="field">
+          <label for="radio">تردد الراديو</label>
+          <input id="radio" placeholder="مثال: 555.5">
+        </div>
+        <div class="field full">
+          <label>موقع التسليم</label>
+          <div class="mapbox">
+            <span class="pin">📍</span>
+            <div><strong>Cayo Perico</strong><small>الموقع محدد مسبقًا</small></div>
+            <span class="fixed">● محدد</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn secondary" onclick="showScreen('products')">رجوع</button>
+        <button class="btn" onclick="confirmInfo()">تأكيد المعلومات ←</button>
+      </div>
+    </section>
+
+    <section id="review" class="screen">
+      <div class="section-head">
+        <div>
+          <h2>مراجعة الطلب</h2>
+          <p>تأكد من المعلومات قبل الإرسال</p>
+        </div>
+        <span class="step">03 / المراجعة</span>
+      </div>
+
+      <div class="review">
+        <div class="review-card">
+          <h3>المنتجات</h3>
+          <div id="review-items"></div>
+          <div class="review-total">
+            <span>الإجمالي</span>
+            <span id="review-total">0$</span>
+          </div>
+        </div>
+        <div class="review-card">
+          <h3>معلومات الطلب</h3>
+          <p>العصابة: <b id="review-gang">—</b></p>
+          <p>الراديو: <b id="review-radio">—</b></p>
+          <p>الموقع: <b>Cayo Perico</b></p>
+          <p>السيرفر: <b>GTA RP</b></p>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn secondary" onclick="showScreen('info')">تعديل المعلومات</button>
+        <button class="btn" onclick="sendOrder()">إرسال الطلب إلى Discord ↗</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>MADRAZO FAMILY • CAYO PERICO • ROLEPLAY ORDER SYSTEM</footer>
+  <div id="toast" class="toast"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
