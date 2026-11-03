@@ -66,8 +66,8 @@ function addProduct(name, inputId) {
   const input = document.getElementById(inputId);
   const quantity = Number.parseInt(input?.value, 10);
 
-  if (!Number.isInteger(quantity) || quantity < 1 || quantity > 999) {
-    toast("أدخل كمية من 1 إلى 999");
+  if (!Number.isInteger(quantity) || quantity < 1 || quantity > 999999) {
+    toast("أدخل كمية من 1 إلى 999999");
     return;
   }
 
