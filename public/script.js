@@ -1,31 +1,47 @@
-const cart = { Math: 0, Cocaine: 0 };
-const price = 0;
+const cart = {
+  Math: 0,
+  Cocaine: 0
+};
 
-// الموسيقى موجودة في public/cartel.mp3
-const music = new Audio("/cartel.mp3");
-music.loop = true;
-music.volume = 0.25;
+const prices = {
+  Math: 0,
+  Cocaine: 600
+};
+
+// الموسيقى من public/cartel.mp3
+const music = document.getElementById("bgMusic");
+if (music) {
+  music.loop = true;
+  music.volume = 0.25;
+}
 
 function showScreen(id) {
   document.querySelectorAll(".screen").forEach(screen => {
     screen.classList.remove("active");
   });
 
-  document.getElementById(id).classList.add("active");
+  const target = document.getElementById(id);
+  if (target) {
+    target.classList.add("active");
+  }
+
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-// تُستدعى من زر الدخول في index.html
 function enterStore() {
-  music.play().catch(() => {
-    toast("تعذر تشغيل الموسيقى. اضغط دخول مرة أخرى.");
-  });
+  if (music) {
+    music.play().catch(() => {
+      toast("اضغط دخول مرة أخرى لتشغيل الموسيقى");
+    });
+  }
 
   showScreen("products");
 }
 
 function toast(message) {
   const element = document.getElementById("toast");
+  if (!element) return;
+
   element.textContent = message;
   element.classList.add("show");
 
@@ -35,10 +51,20 @@ function toast(message) {
 }
 
 function addProduct(name, inputId) {
-  const quantity = Number.parseInt(
-    document.getElementById(inputId).value,
-    10
-  );
+  // Math غير متوفر
+  if (name === "Math") {
+    toast("Math غير متوفر حاليًا");
+    return;
+  }
+
+  // السماح فقط بالمنتجات المعروفة والمتوفرة
+  if (name !== "Cocaine") {
+    toast("هذا المنتج غير متوفر");
+    return;
+  }
+
+  const input = document.getElementById(inputId);
+  const quantity = Number.parseInt(input?.value, 10);
 
   if (!Number.isInteger(quantity) || quantity < 1 || quantity > 999) {
     toast("أدخل كمية من 1 إلى 999");
@@ -47,12 +73,14 @@ function addProduct(name, inputId) {
 
   cart[name] += quantity;
   updateCart();
+
   toast(`تمت إضافة ${quantity} × ${name}`);
 }
 
 function updateCart() {
-  const count = cart.Math + cart.Cocaine;
-  const total = count * price;
+  // Math مستبعد لأنه غير متوفر
+  const count = cart.Cocaine;
+  const total = cart.Cocaine * prices.Cocaine;
 
   document.getElementById("cart-count").textContent = count;
   document.getElementById("cart-total").textContent =
@@ -62,12 +90,13 @@ function updateCart() {
 function clearCart() {
   cart.Math = 0;
   cart.Cocaine = 0;
+
   updateCart();
   toast("تم إفراغ الطلب");
 }
 
 function goInfo() {
-  if (cart.Math + cart.Cocaine === 0) {
+  if (cart.Cocaine === 0) {
     toast("أضف منتجًا واحدًا على الأقل");
     return;
   }
@@ -89,41 +118,43 @@ function confirmInfo() {
 
   let itemsHTML = "";
 
-  for (const name of ["Math", "Cocaine"]) {
-    if (cart[name] > 0) {
-      const total = cart[name] * price;
+  if (cart.Cocaine > 0) {
+    const total = cart.Cocaine * prices.Cocaine;
 
-      itemsHTML += `<p>${name}: <b>${cart[name]} × ${price}$ = ${total.toLocaleString()}$</b></p>`;
-    }
+    itemsHTML += `
+      <p>
+        Cocaine:
+        <b>${cart.Cocaine} × ${prices.Cocaine}$ = ${total.toLocaleString()}$</b>
+      </p>
+    `;
   }
 
   document.getElementById("review-items").innerHTML = itemsHTML;
   document.getElementById("review-total").textContent =
-    ((cart.Math + cart.Cocaine) * price).toLocaleString() + "$";
+    (cart.Cocaine * prices.Cocaine).toLocaleString() + "$";
 
   showScreen("review");
 }
 
 async function sendOrder() {
+  if (cart.Cocaine === 0) {
+    toast("لا يوجد منتج لإرساله");
+    return;
+  }
+
   const data = {
     gang: document.getElementById("gang").value.trim(),
     radio: document.getElementById("radio").value.trim(),
     location: "Cayo Perico",
     items: [
       {
-        name: "Math",
-        quantity: cart.Math,
-        unitPrice: price,
-        total: cart.Math * price
-      },
-      {
         name: "Cocaine",
         quantity: cart.Cocaine,
-        unitPrice: price,
-        total: cart.Cocaine * price
+        unitPrice: prices.Cocaine,
+        total: cart.Cocaine * prices.Cocaine
       }
-    ].filter(item => item.quantity > 0),
-    total: (cart.Math + cart.Cocaine) * price
+    ],
+    total: cart.Cocaine * prices.Cocaine
   };
 
   try {
@@ -142,5 +173,6 @@ async function sendOrder() {
     toast("تم إرسال الطلب إلى Discord بنجاح");
   } catch (error) {
     toast("تعذر إرسال الطلب. تحقق من إعدادات Netlify.");
+    console.error(error);
   }
 }

@@ -31,22 +31,24 @@
       </div>
 
       <div class="products">
-        <article class="product">
+        <!-- Math: غير متوفر -->
+        <article class="product unavailable">
           <div class="symbol">▣</div>
           <h3>Math</h3>
           <p>منتج داخل عالم اللعبة</p>
-          <div class="price"> 0$ <small>/ للحبة</small></div>
+          <div class="price">0$ <small>/ غير متوفر</small></div>
           <div class="qtyrow">
-            <input type="number" id="qty-math" min="0" max="0" value="1">
-            <button class="btn" onclick="addProduct('Math','qty-math')">غير متوفر</button>
+            <input type="number" id="qty-math" value="0" disabled>
+            <button class="btn" type="button" disabled>غير متوفر</button>
           </div>
         </article>
 
+        <!-- Cocaine: متوفر -->
         <article class="product">
           <div class="symbol">◈</div>
           <h3>Cocaine</h3>
           <p>منتج داخل عالم اللعبة</p>
-          <div class="price"> 600$ <small>/ للحبة</small></div>
+          <div class="price">600$ <small>/ للحبة</small></div>
           <div class="qtyrow">
             <input type="number" id="qty-cocaine" min="1" max="999" value="1">
             <button class="btn" onclick="addProduct('Cocaine','qty-cocaine')">شراء</button>
@@ -55,9 +57,13 @@
       </div>
 
       <div class="cartbar">
-        <div>عدد القطع: <strong id="cart-count">0</strong> | المجموع: <strong id="cart-total">0$</strong></div>
+        <div>
+          عدد القطع: <strong id="cart-count">0</strong> |
+          المجموع: <strong id="cart-total">0$</strong>
+        </div>
         <button class="btn" onclick="goInfo()">متابعة الطلب ←</button>
       </div>
+
       <div class="actions">
         <button class="btn secondary" onclick="showScreen('home')">رجوع</button>
         <button class="btn secondary" onclick="clearCart()">إفراغ الطلب</button>
@@ -78,10 +84,12 @@
           <label for="gang">اسم العصابة / المافيا</label>
           <input id="gang" placeholder="مثال: Madrazo Family">
         </div>
+
         <div class="field">
           <label for="radio">تردد الراديو</label>
           <input id="radio" placeholder="مثال: 555.5">
         </div>
+
         <div class="field full">
           <label>موقع التسليم</label>
           <div class="mapbox">
@@ -119,6 +127,7 @@
             <span id="review-total">0$</span>
           </div>
         </div>
+
         <div class="review-card">
           <h3>معلومات الطلب</h3>
           <p>العصابة: <b id="review-gang">—</b></p>
