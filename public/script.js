@@ -1,5 +1,5 @@
 const cart = { Math: 0, Cocaine: 0 };
-const price = 600;
+const price = 0;
 
 // الموسيقى موجودة في public/cartel.mp3
 const music = new Audio("/cartel.mp3");
